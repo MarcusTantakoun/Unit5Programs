@@ -21,7 +21,7 @@ public class Task {
     public void setName(String nm) {
             name = nm;
     }
-    public final String getName() {
+    public String getName() {
         return name;
     }
     
@@ -29,7 +29,7 @@ public class Task {
     public void setDescription(String d) {
             description = d;
     }
-    public final String getDescription() {
+    public String getDescription() {
         return description;
     }
 }
