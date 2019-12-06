@@ -26,20 +26,12 @@ public class TaskMaster extends javax.swing.JFrame {
         while (li.hasPrevious()) {
             t = li.previous();
         }
-        
-        li.next();
         currentTask++;
         toTask = 3;
         currentBox.setText("" + currentTask);
         totalBox.setText("" + toTask);
         nameBox.setText(t.getName());
         descriptionBox.setText(t.getDescription());
-    }
-
-    //disables the ability to edit the inputs until you clear the screen
-    public void disable() {
-        descriptionBox.setEditable(false);
-        nameBox.setEditable(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -52,10 +44,10 @@ public class TaskMaster extends javax.swing.JFrame {
         nameBox = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        lastbtn = new javax.swing.JButton();
+        firstbtn = new javax.swing.JButton();
         leftbtn = new javax.swing.JButton();
         rightbtn = new javax.swing.JButton();
-        firstbtn = new javax.swing.JButton();
+        lastbtn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         currentBox = new javax.swing.JTextField();
@@ -99,11 +91,11 @@ public class TaskMaster extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        lastbtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lastbtn.setText("<<");
-        lastbtn.addActionListener(new java.awt.event.ActionListener() {
+        firstbtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        firstbtn.setText("<<");
+        firstbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lastbtnActionPerformed(evt);
+                firstbtnActionPerformed(evt);
             }
         });
 
@@ -121,11 +113,11 @@ public class TaskMaster extends javax.swing.JFrame {
             }
         });
 
-        firstbtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        firstbtn.setText(">>");
-        firstbtn.addActionListener(new java.awt.event.ActionListener() {
+        lastbtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lastbtn.setText(">>");
+        lastbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                firstbtnActionPerformed(evt);
+                lastbtnActionPerformed(evt);
             }
         });
 
@@ -135,13 +127,13 @@ public class TaskMaster extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lastbtn)
+                .addComponent(firstbtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(leftbtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addComponent(rightbtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(firstbtn)
+                .addComponent(lastbtn)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -149,10 +141,10 @@ public class TaskMaster extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lastbtn)
+                    .addComponent(firstbtn)
                     .addComponent(leftbtn)
                     .addComponent(rightbtn)
-                    .addComponent(firstbtn))
+                    .addComponent(lastbtn))
                 .addContainerGap())
         );
 
@@ -247,6 +239,11 @@ public class TaskMaster extends javax.swing.JFrame {
         jMenu2.setText("Edit");
 
         replacebtn.setText("Replace This As Current Task");
+        replacebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                replacebtnActionPerformed(evt);
+            }
+        });
         jMenu2.add(replacebtn);
 
         removebtn.setText("Remove Current Task");
@@ -258,6 +255,11 @@ public class TaskMaster extends javax.swing.JFrame {
         jMenu2.add(removebtn);
 
         restorebtn.setText("Restore Current Task to Screen");
+        restorebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restorebtnActionPerformed(evt);
+            }
+        });
         jMenu2.add(restorebtn);
 
         clearbtn.setText("Clear Screen");
@@ -333,38 +335,30 @@ public class TaskMaster extends javax.swing.JFrame {
         totalBox.setText("" + toTask);
         currentBox.setText("" + currentTask);
         JOptionPane.showMessageDialog(this, "Task Added");
-        disable();
     }//GEN-LAST:event_afterbtnActionPerformed
 
-    private void lastbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastbtnActionPerformed
-        if (currentTask == toTask) {
-            return; //if its at the end, return
-        }
-        while (li.hasNext()) { //.hasNext() makes it so that it goes to the end
-            li.next();
-        }
-        t = li.previous(); //iterator gets in front of last task
-        currentTask = toTask; //current task is the last task
-
-        currentBox.setText("" + currentTask);
-        nameBox.setText(t.getName());
-        descriptionBox.setText(t.getDescription());
-        disable();
-    }//GEN-LAST:event_lastbtnActionPerformed
-
-    private void leftbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leftbtnActionPerformed
-        if (currentTask < 2) {
+    private void firstbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstbtnActionPerformed
+        if (currentTask == 1) {
             return;
         }
-        li.previous();
-        li.previous();
-        t = li.next();
-
-        currentTask--;
+        while (li.hasPrevious()) {
+            t = li.previous();
+        }
+        currentTask = 1;
         currentBox.setText("" + currentTask);
         nameBox.setText(t.getName());
         descriptionBox.setText(t.getDescription());
-        disable();
+    }//GEN-LAST:event_firstbtnActionPerformed
+
+    private void leftbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leftbtnActionPerformed
+        if (currentTask > 1) {
+            t = li.previous();
+
+            currentTask--;
+            currentBox.setText("" + currentTask);
+            nameBox.setText(t.getName());
+            descriptionBox.setText(t.getDescription());
+        }
     }//GEN-LAST:event_leftbtnActionPerformed
 
     private void rightbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rightbtnActionPerformed
@@ -374,12 +368,10 @@ public class TaskMaster extends javax.swing.JFrame {
         li.next();
         li.next();
         t = li.previous();
-        
         currentTask++;
         currentBox.setText("" + currentTask);
         nameBox.setText(t.getName());
         descriptionBox.setText(t.getDescription());
-        disable();
     }//GEN-LAST:event_rightbtnActionPerformed
 
     private void beforebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beforebtnActionPerformed
@@ -392,34 +384,28 @@ public class TaskMaster extends javax.swing.JFrame {
         }
         li.add(t);
         li.previous();
-        if (toTask == 1) {
-            currentTask = 1;
-        } else {
-            currentTask--;
-        }
         toTask++;
         totalBox.setText("" + toTask);
         currentBox.setText("" + currentTask);
         JOptionPane.showMessageDialog(this, "Task Added");
-        disable();
     }//GEN-LAST:event_beforebtnActionPerformed
 
-    private void firstbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstbtnActionPerformed
-        if (currentTask == toTask) {
-            return;
-        }
-        while (li.hasPrevious()) {
-            li.previous();
-        }
+    private void lastbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastbtnActionPerformed
 
-        t = li.next();
-        currentTask = toTask;
+        if (currentTask == toTask) {
+            return; //if its at the end, return
+        }
+        while (li.hasNext()) { //.hasNext() makes it so that it goes to the end
+            li.next();
+        }
+        t = li.previous(); //iterator gets in front of last task
+        currentTask = toTask; //current task is the last task
 
         currentBox.setText("" + currentTask);
         nameBox.setText(t.getName());
         descriptionBox.setText(t.getDescription());
 
-    }//GEN-LAST:event_firstbtnActionPerformed
+    }//GEN-LAST:event_lastbtnActionPerformed
 
     private void clearbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearbtnActionPerformed
         nameBox.setText("");
@@ -434,11 +420,60 @@ public class TaskMaster extends javax.swing.JFrame {
     }//GEN-LAST:event_exitbtnActionPerformed
 
     private void removebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebtnActionPerformed
-        if(toTask<1) return;
+        if (toTask < 1) {
+            return;
+        }
         li.next();
         li.remove();
+        li.previous();
         toTask--;
+        if (toTask == 0) {
+            nameBox.setText("");
+            descriptionBox.setText("");
+            currentTask = 0;
+        }
+        if (toTask == 1) {
+            if (li.hasNext()) {
+                li.next();
+                t = li.previous();
+            } else if (li.hasPrevious()) {
+                t = li.previous();
+            }
+        }
     }//GEN-LAST:event_removebtnActionPerformed
+
+    private void restorebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restorebtnActionPerformed
+        li.next();
+        t = li.previous();
+        li.previous();
+        nameBox.setText(t.getName());
+        descriptionBox.setText(t.getDescription());
+        currentBox.setText("" + currentTask);
+        totalBox.setText("" + toTask);
+        JOptionPane.showMessageDialog(this, "Task Restored");
+    }//GEN-LAST:event_restorebtnActionPerformed
+
+    private void replacebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replacebtnActionPerformed
+        if (toTask == 0) {
+            JOptionPane.showMessageDialog(this, "NO TASKS LEFT");
+            return;
+        }
+        String nm = nameBox.getText();
+        String d = descriptionBox.getText();
+        Task t = new Task(nm, d);
+        if (t.validate() == false) {
+            JOptionPane.showMessageDialog(this, "ERROR - Must enter all information");
+            return;
+        }
+        li.next();
+        li.set(t);
+        li.previous();
+
+        nameBox.setText(t.getName());
+        descriptionBox.setText(t.getDescription());
+        currentBox.setText("" + currentTask);
+        totalBox.setText("" + toTask);
+    }//GEN-LAST:event_replacebtnActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
