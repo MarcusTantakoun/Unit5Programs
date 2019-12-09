@@ -28,6 +28,10 @@ public class TaskMaster extends javax.swing.JFrame {
         }
         currentTask++;
         toTask = 3;
+        display();
+    }
+
+    public void display() {
         currentBox.setText("" + currentTask);
         totalBox.setText("" + toTask);
         nameBox.setText(t.getName());
@@ -384,6 +388,9 @@ public class TaskMaster extends javax.swing.JFrame {
         }
         li.add(t);
         li.previous();
+        if ((!li.hasPrevious() && !li.hasNext()) || toTask == 0) {
+            currentTask++;
+        }
         toTask++;
         totalBox.setText("" + toTask);
         currentBox.setText("" + currentTask);
@@ -391,7 +398,7 @@ public class TaskMaster extends javax.swing.JFrame {
     }//GEN-LAST:event_beforebtnActionPerformed
 
     private void lastbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastbtnActionPerformed
-
+        //farthest right button
         if (currentTask == toTask) {
             return; //if its at the end, return
         }
@@ -420,42 +427,74 @@ public class TaskMaster extends javax.swing.JFrame {
     }//GEN-LAST:event_exitbtnActionPerformed
 
     private void removebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebtnActionPerformed
-        if (toTask < 1) {
+        //if there is nothing return
+        if (toTask == 0) {
+            JOptionPane.showMessageDialog(this, "ERROR - Must have existing tasks to remove");
             return;
         }
         li.next();
-        li.remove();
-        li.previous();
+        //iterator moves left
+        li.remove(); //iterator removes what it read (task on the left)
+        //now iterator is left of the next task
         toTask--;
+
+        //3 scenarios:
+        //NO TASKS - empty everything
         if (toTask == 0) {
-            nameBox.setText("");
-            descriptionBox.setText("");
             currentTask = 0;
-        }
-        if (toTask == 1) {
-            if (li.hasNext()) {
+            currentBox.setText("" + 0);
+            totalBox.setText("" + 0);
+            descriptionBox.setText("");
+            nameBox.setText("");
+        } 
+        
+        else if (toTask == 1) {
+            currentTask = 1;
+            if (li.hasNext()) { //if li has a task on the right..
+                li.next(); //move iterator right
+                t = li.previous(); //read task
+                display();
+            } else if (li.hasPrevious()) { //if li has a task on right...
+                t = li.previous(); //read task
+                display();
+            }
+            
+            
+        } else if (toTask > 1) {
+            if (!li.hasPrevious()) { //if we removed first item
                 li.next();
-                t = li.previous();
-            } else if (li.hasPrevious()) {
-                t = li.previous();
+                t = li.previous(); //read task
+                display();
+            } else {
+                t = li.previous(); //read task
+                currentTask--;
+                display();
             }
         }
+        JOptionPane.showMessageDialog(this, "Task Removed");
     }//GEN-LAST:event_removebtnActionPerformed
 
     private void restorebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restorebtnActionPerformed
-        li.next();
-        t = li.previous();
-        li.previous();
-        nameBox.setText(t.getName());
-        descriptionBox.setText(t.getDescription());
-        currentBox.setText("" + currentTask);
-        totalBox.setText("" + toTask);
+        if (toTask == 0) {
+            JOptionPane.showMessageDialog(this, "ERROR - Must have existing tasks to restore");
+            return;
+        }
+
+        if (currentTask == 1) {
+            t = li.next();
+            li.previous();
+        } else {
+            li.next();
+            t = li.previous();
+        }
+
+        display();
         JOptionPane.showMessageDialog(this, "Task Restored");
     }//GEN-LAST:event_restorebtnActionPerformed
 
     private void replacebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replacebtnActionPerformed
         if (toTask == 0) {
-            JOptionPane.showMessageDialog(this, "NO TASKS LEFT");
+            JOptionPane.showMessageDialog(this, "ERROR - Must have existing tasks to replace");
             return;
         }
         String nm = nameBox.getText();
@@ -473,6 +512,7 @@ public class TaskMaster extends javax.swing.JFrame {
         descriptionBox.setText(t.getDescription());
         currentBox.setText("" + currentTask);
         totalBox.setText("" + toTask);
+        JOptionPane.showMessageDialog(this, "Task has been replaced");
     }//GEN-LAST:event_replacebtnActionPerformed
 
     public static void main(String args[]) {
@@ -486,16 +526,24 @@ public class TaskMaster extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TaskMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaskMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TaskMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaskMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TaskMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaskMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TaskMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaskMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
